@@ -2,7 +2,6 @@ package routes
 
 import (
   "net/http"
-  "log"
   "github.com/gorilla/mux"
   // if middleware ...
 )

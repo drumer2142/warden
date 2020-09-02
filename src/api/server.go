@@ -12,8 +12,8 @@ func init(){
   config.Load()
 }
 
-func main(){
-  port := config.APP_PORT
+func Run(){
+  port := config.APPPORT
   router := router.New()
 
   fmt.Printf("\nListening [::]:%d \n", port)

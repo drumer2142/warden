@@ -2,7 +2,7 @@ package routes
 
 import (
   "net/http"
-  "github.com/drumer2142/url-store/src/api/controllers"
+  "github.com/drumer2142/warden/src/api/controllers"
 )
 
 var api_routes = []Route{
