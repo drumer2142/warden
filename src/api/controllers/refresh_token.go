@@ -1,23 +1,32 @@
 package controllers
 
 import (
+	"log"
 	"time"
 	"net/http"
+	"encoding/json"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/drumer2142/warden/src/api/models"
+	"github.com/drumer2142/warden/src/api/handler"
  )
 
 func RefreshToken(w http.ResponseWriter, r *http.Request){
-	c, err := r.Cookie("token")
+
+	var authtkn models.AuthToken
+
+	err := json.NewDecoder(r.Body).Decode(&authtkn)
 	if err != nil {
-		if err == http.ErrNoCookie {
-			w.WriteHeader(http.StatusUnauthorized)
-			return
-		}
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
-	tknStr := c.Value
+	if authtkn.Name != "token"{
+		handler.ResponseError(w, http.StatusBadRequest, "Bad Token Given")
+		return
+	}
+
+	tknStr := authtkn.Value
+	log.Println(tknStr)
+
 	claims := &models.Claims{}
 	tkn, err := jwt.ParseWithClaims(tknStr, claims, func(token *jwt.Token) (interface{}, error) {
 		return jwtKey, nil
@@ -50,10 +59,11 @@ func RefreshToken(w http.ResponseWriter, r *http.Request){
 		return
 	}
 
-	// Set the new token as the users `token` cookie
-	http.SetCookie(w, &http.Cookie{
+	cookie_return := models.AuthToken{
 		Name:    "token",
 		Value:   tokenString,
 		Expires: expirationTime,
-	})
+	}
+
+	handler.ResponseJSON(w, http.StatusOK, cookie_return)
 }

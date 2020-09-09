@@ -1,24 +1,32 @@
 package controllers
 
 import (
-	"fmt"
+	"log"
 	"net/http"
+	"encoding/json"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/drumer2142/warden/src/api/models"
+	"github.com/drumer2142/warden/src/api/handler"
 )
 
 func AuthRoute(w http.ResponseWriter, r *http.Request){
-	ck, err :=  r.Cookie("token")
+
+
+	var authtkn models.AuthToken
+
+	err := json.NewDecoder(r.Body).Decode(&authtkn)
 	if err != nil {
-		if err == http.ErrNoCookie{
-			w.WriteHeader(http.StatusUnauthorized)
-			return
-		}
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
+	if authtkn.Name != "token"{
+		handler.ResponseError(w, http.StatusBadRequest, "Bad Token Given")
+		return
+	}
 
-	tknStr := ck.Value
+	tknStr := authtkn.Value
+	log.Println(tknStr)
+
 	claims := &models.Claims{}
 
 	tkn, err := jwt.ParseWithClaims(tknStr, claims, func(token *jwt.Token) (interface{}, error) {
@@ -38,7 +46,5 @@ func AuthRoute(w http.ResponseWriter, r *http.Request){
 		return
 	}
 
-	// Finally, return the welcome message to the user, along with their
-	// username given in the token
-	w.Write([]byte(fmt.Sprintf("Welcome %s!", claims.Username)))
+	handler.ResponseJSON(w, http.StatusOK, claims.Username)
 }

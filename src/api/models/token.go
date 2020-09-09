@@ -2,7 +2,7 @@ package models
 
 import (
   "github.com/dgrijalva/jwt-go"
-  // "time"
+  "time"
 )
 
 type Credentials struct {
@@ -16,8 +16,8 @@ type Claims struct {
   jwt.StandardClaims
 }
 
-// type ReturnToken struct {
-//   Name string `json:"name"`
-//   Value string `json:"value"`
-//   Expires time.Time `json:"expires"`
-// }
+type AuthToken struct {
+  Name string `json:"name"`
+  Value string `json:"value"`
+  Expires time.Time `json:"expires"`
+}

@@ -13,11 +13,6 @@ import (
 
 var jwtKey = config.JWTKEY
 
-// var users = map[string]string{
-// 	"user1": "password1",
-// 	"user2": "password2",
-// }
-
 func SignIn(w http.ResponseWriter, r *http.Request){
   var creds models.Credentials
 
@@ -37,7 +32,7 @@ func SignIn(w http.ResponseWriter, r *http.Request){
   result := db.Debug().Where("username = ? AND password = ?", creds.Username,creds.Password).First(&creds).RecordNotFound()
 
   if result == true {
-    handler.ResponseJSON(w, http.StatusUnauthorized, err)
+    handler.ResponseJSON(w, http.StatusUnauthorized, result)
     return
   }
 
@@ -57,19 +52,19 @@ func SignIn(w http.ResponseWriter, r *http.Request){
     w.WriteHeader(http.StatusInternalServerError)
     return
   }
-
-  // cookie_return := models.ReturnToken{
+  
+  // set a cookie if used that way else return a json response
+  // http.SetCookie(w, &http.Cookie{ 
   //   Name:    "token",
 	// 	Value:   tokenString,
 	// 	Expires: expirationTime,
-  // }
-  
-  // set a cookie if used that way else return a json response
-  http.SetCookie(w, &http.Cookie{ 
-    Name:    "token",
+  // })
+
+  cookie_return := models.AuthToken{
+   Name:    "token",
 		Value:   tokenString,
 		Expires: expirationTime,
-  })
+  }
 
-  // handler.ResponseJSON(w, http.StatusOK, cookie_return)
+  handler.ResponseJSON(w, http.StatusOK, cookie_return)
 }
