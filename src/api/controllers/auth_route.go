@@ -10,8 +10,6 @@ import (
 )
 
 func AuthRoute(w http.ResponseWriter, r *http.Request){
-
-
 	var authtkn models.AuthToken
 
 	err := json.NewDecoder(r.Body).Decode(&authtkn)

@@ -42,7 +42,7 @@ func SignIn(w http.ResponseWriter, r *http.Request){
     Username: creds.Username,
     StandardClaims: jwt.StandardClaims{
       ExpiresAt: expirationTime.Unix(),
-    },    
+    },
   }
 
   // create the token
@@ -52,19 +52,19 @@ func SignIn(w http.ResponseWriter, r *http.Request){
     w.WriteHeader(http.StatusInternalServerError)
     return
   }
-  
-  // set a cookie if used that way else return a json response
-  // http.SetCookie(w, &http.Cookie{ 
-  //   Name:    "token",
-	// 	Value:   tokenString,
-	// 	Expires: expirationTime,
-  // })
 
-  cookie_return := models.AuthToken{
-   Name:    "token",
+  // set a cookie if used that way else return a json response
+  http.SetCookie(w, &http.Cookie{
+    Name:    "token",
 		Value:   tokenString,
 		Expires: expirationTime,
-  }
+  })
 
-  handler.ResponseJSON(w, http.StatusOK, cookie_return)
+  // cookie_return := models.AuthToken{
+  //  Name:    "token",
+	// 	Value:   tokenString,
+	// 	Expires: expirationTime,
+  // }
+  //
+  // handler.ResponseJSON(w, http.StatusOK, cookie_return)
 }

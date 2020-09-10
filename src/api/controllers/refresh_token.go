@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"log"
 	"time"
 	"net/http"
 	"encoding/json"
@@ -11,7 +10,6 @@ import (
  )
 
 func RefreshToken(w http.ResponseWriter, r *http.Request){
-
 	var authtkn models.AuthToken
 
 	err := json.NewDecoder(r.Body).Decode(&authtkn)
@@ -19,18 +17,18 @@ func RefreshToken(w http.ResponseWriter, r *http.Request){
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
+	
 	if authtkn.Name != "token"{
 		handler.ResponseError(w, http.StatusBadRequest, "Bad Token Given")
 		return
 	}
 
 	tknStr := authtkn.Value
-	log.Println(tknStr)
-
 	claims := &models.Claims{}
 	tkn, err := jwt.ParseWithClaims(tknStr, claims, func(token *jwt.Token) (interface{}, error) {
 		return jwtKey, nil
 	})
+
 	if err != nil {
 		if err == jwt.ErrSignatureInvalid {
 			w.WriteHeader(http.StatusUnauthorized)
@@ -39,6 +37,7 @@ func RefreshToken(w http.ResponseWriter, r *http.Request){
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
+
 	if !tkn.Valid {
 		w.WriteHeader(http.StatusUnauthorized)
 		return
