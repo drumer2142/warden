@@ -13,7 +13,7 @@ services:
       MYSQL_USER: warden_admin
       MYSQL_PASSWORD: warden@123!bB
     ports:
-      - "3306:3306"
+      - "3307:3306"
     networks:
       - warden_network
     expose:
@@ -39,7 +39,7 @@ services:
     depends_on:
       db:
         condition: service_healthy
-    #for v3+ use wait-for-it    
+    #for v3+ use wait-for-it
     #commmand: ["./wait-for-it.sh", "db:3306", "--", "go", "run", "src/*.go"]
 
 networks:
