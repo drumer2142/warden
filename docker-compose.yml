@@ -3,7 +3,7 @@ version: '2.1'
 
 services:
 
-  db:
+  warden_db:
     container_name: warden-db
     image: mysql
     restart: always
@@ -15,7 +15,7 @@ services:
     ports:
       - "3307:3306"
     networks:
-      - warden_network
+      - api_network
     expose:
     # Opens port 3306 on the container
     - "3306"
@@ -35,7 +35,7 @@ services:
     ports:
       - "8888:8888"
     networks:
-      - warden_network
+      - api_network
     depends_on:
       db:
         condition: service_healthy
@@ -43,5 +43,5 @@ services:
     #commmand: ["./wait-for-it.sh", "db:3306", "--", "go", "run", "src/*.go"]
 
 networks:
-  warden_network:
+  api_network:
     driver: bridge
