@@ -10,9 +10,9 @@ import (
 )
 
 func AuthRoute(w http.ResponseWriter, r *http.Request){
-	var authtkn models.AuthToken
-
+  var authtkn models.AuthToken
 	err := json.NewDecoder(r.Body).Decode(&authtkn)
+
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
 		return
@@ -23,10 +23,7 @@ func AuthRoute(w http.ResponseWriter, r *http.Request){
 	}
 
 	tknStr := authtkn.Value
-	log.Println(tknStr)
-
 	claims := &models.Claims{}
-
 	tkn, err := jwt.ParseWithClaims(tknStr, claims, func(token *jwt.Token) (interface{}, error) {
 		return jwtKey, nil
 	})
@@ -43,6 +40,6 @@ func AuthRoute(w http.ResponseWriter, r *http.Request){
 		w.WriteHeader(http.StatusUnauthorized)
 		return
 	}
-
+  
 	handler.ResponseJSON(w, http.StatusOK, claims.Username)
 }
