@@ -1,7 +1,7 @@
 package controllers
 
 import (
-	"log"
+	_"log"
 	"net/http"
 	"encoding/json"
 	"github.com/dgrijalva/jwt-go"
@@ -40,6 +40,6 @@ func AuthRoute(w http.ResponseWriter, r *http.Request){
 		w.WriteHeader(http.StatusUnauthorized)
 		return
 	}
-  
+
 	handler.ResponseJSON(w, http.StatusOK, claims.Username)
 }
