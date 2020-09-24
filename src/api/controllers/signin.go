@@ -59,12 +59,5 @@ func SignIn(w http.ResponseWriter, r *http.Request){
 		Value:   tokenString,
 		Expires: expirationTime,
   })
-
-  // cookie_return := models.AuthToken{
-  //  Name:    "token",
-	// 	Value:   tokenString,
-	// 	Expires: expirationTime,
-  // }
-  //
-  // handler.ResponseJSON(w, http.StatusOK, cookie_return)
+  // can also send the token as json but in this case it is needed as token
 }

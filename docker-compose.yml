@@ -37,7 +37,7 @@ services:
     networks:
       - api_network
     depends_on:
-      db:
+      warden_db:
         condition: service_healthy
     #for v3+ use wait-for-it
     #commmand: ["./wait-for-it.sh", "db:3306", "--", "go", "run", "src/*.go"]
